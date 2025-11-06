@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MotoMonitoramento.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250923151043_AddMovimentacoes")]
-    partial class AddMovimentacoes
+    [Migration("20251106022533_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,11 +41,6 @@ namespace MotoMonitoramento.Migrations
                     b.Property<int?>("SetorId")
                         .HasColumnType("NUMBER(10)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR2(20)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SetorId");
@@ -67,10 +62,10 @@ namespace MotoMonitoramento.Migrations
                     b.Property<int>("MotoId")
                         .HasColumnType("NUMBER(10)");
 
-                    b.Property<int?>("SetorAntigoId")
+                    b.Property<int>("SetorAntigoId")
                         .HasColumnType("NUMBER(10)");
 
-                    b.Property<int?>("SetorNovoId")
+                    b.Property<int>("SetorNovoId")
                         .HasColumnType("NUMBER(10)");
 
                     b.HasKey("Id");
@@ -118,6 +113,12 @@ namespace MotoMonitoramento.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("TIMESTAMP(7)");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
@@ -146,11 +147,15 @@ namespace MotoMonitoramento.Migrations
 
                     b.HasOne("MotoMonitoramento.Models.Setor", "SetorAntigo")
                         .WithMany()
-                        .HasForeignKey("SetorAntigoId");
+                        .HasForeignKey("SetorAntigoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MotoMonitoramento.Models.Setor", "SetorNovo")
                         .WithMany()
-                        .HasForeignKey("SetorNovoId");
+                        .HasForeignKey("SetorNovoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Moto");
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RESOURCE_GROUP="qmovechallenge"
+RESOURCE_GROUP="MottuVisulizer"
 VM_NAME="vmchallenge"
 LOCATION="eastus"
 ADMIN_USERNAME="azureuser"
