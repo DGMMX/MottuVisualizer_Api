@@ -1,14 +1,18 @@
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+// REMOVIDO: using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+// REMOVIDO: using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MotoMonitoramento.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// =========================================================
+// 1. CONFIGURAÇÃO DE SERVIÇOS (builder.Services.Add...)
+// =========================================================
 
 // Banco de dados Oracle
 builder.Services.AddDbContextPool<AppDbContext>(options =>
@@ -33,36 +37,19 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
 
-    // 🔹 JWT no Swagger
-    c.AddSecurityDefinition(
-        "Bearer",
-        new OpenApiSecurityScheme
+    // Sua configuração de Documentação da API (mantendo os valores customizados)
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = builder.Configuration["Swagger:Title"] ?? "Título Padrão da API", // Adicionado fallback
+        Description = (builder.Configuration["Swagger:Description"] ?? "Descrição da API") + DateTime.Now.Year,
+        Contact = new OpenApiContact()
         {
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            Scheme = "bearer",
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Description = "Insira o token JWT: Bearer {token}",
+            Email = "rm558710@fiap.com.br",
+            Name = "Diego Bassalo"
         }
-    );
+    });
 
-    c.AddSecurityRequirement(
-        new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer",
-                    },
-                },
-                Array.Empty<string>()
-            },
-        }
-    );
+    // 🔹 REMOVIDA toda a configuração JWT (AddSecurityDefinition e AddSecurityRequirement)
 });
 
 // Health Checks
@@ -77,48 +64,50 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
 
-// JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+// REMOVIDA: JWT Authentication section
+// REMOVIDO: var jwtKey = builder.Configuration["Jwt:Key"];
+// REMOVIDO: var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+// REMOVIDO: builder.Services.AddAuthentication(...)
 
-builder
-    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtIssuer,
-            ValidAudience = jwtIssuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
-        };
-    });
-
+// =========================================================
+// 2. CONSTRUÇÃO DA APLICAÇÃO
+// =========================================================
 var app = builder.Build();
 
-app.UseCors("AllowAll");
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MottuVisualizer API v1");
-    c.RoutePrefix = "swagger";
-});
+// =========================================================
+// 3. CONFIGURAÇÃO DO PIPELINE/MIDDLEWARE (app.Use...)
+// =========================================================
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Configuração do Swagger/OpenAPI no pipeline (middleware)
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sua API v1");
+    });
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+}
+
+// Aplica a política de CORS
+app.UseCors("AllowAll");
+
+// REMOVIDO: app.UseAuthentication();
+app.UseAuthorization(); // Mantido para o caso de ter Controllers com [Authorize] que você queira remover depois.
+
+// Mapeamento de endpoints
 app.MapControllers();
 app.MapHealthChecks("/health");
-
 app.MapGet("/", () => "✅ API MottuVisualizer funcionando!");
 
+
+// Configuração de Porta e Execução
 var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
 app.Urls.Add($"http://*:{port}");
-
-#if DEBUG
-app.UseDeveloperExceptionPage();
-#endif
 
 app.Run();
