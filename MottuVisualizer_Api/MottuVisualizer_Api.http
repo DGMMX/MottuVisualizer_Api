@@ -1,6 +1,0 @@
-@MottuVisualizer_Api_HostAddress = http://localhost:5146
-
-GET {{MottuVisualizer_Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
