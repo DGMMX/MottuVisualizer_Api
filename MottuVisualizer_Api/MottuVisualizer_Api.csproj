@@ -7,7 +7,53 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\Data\**" />
+    <Compile Remove="Properties\Dtos\**" />
+    <Compile Remove="Properties\Migrations\**" />
+    <Compile Remove="Properties\Models\**" />
+    <Compile Remove="Properties\publish\**" />
+    <Content Remove="Properties\Data\**" />
+    <Content Remove="Properties\Dtos\**" />
+    <Content Remove="Properties\Migrations\**" />
+    <Content Remove="Properties\Models\**" />
+    <Content Remove="Properties\publish\**" />
+    <EmbeddedResource Remove="Properties\Data\**" />
+    <EmbeddedResource Remove="Properties\Dtos\**" />
+    <EmbeddedResource Remove="Properties\Migrations\**" />
+    <EmbeddedResource Remove="Properties\Models\**" />
+    <EmbeddedResource Remove="Properties\publish\**" />
+    <None Remove="Properties\Data\**" />
+    <None Remove="Properties\Dtos\**" />
+    <None Remove="Properties\Migrations\**" />
+    <None Remove="Properties\Models\**" />
+    <None Remove="Properties\publish\**" />
+    <_WebToolingArtifacts Remove="Properties\Data\**" />
+    <_WebToolingArtifacts Remove="Properties\Dtos\**" />
+    <_WebToolingArtifacts Remove="Properties\Migrations\**" />
+    <_WebToolingArtifacts Remove="Properties\Models\**" />
+    <_WebToolingArtifacts Remove="Properties\publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.26000" />
+    <PackageReference Include="QRCoder" Version="1.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
 </Project>
