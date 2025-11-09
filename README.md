@@ -25,57 +25,69 @@ Registro das movimentações internas através da leitura de QR Codes.
 Com isso, a empresa obtém mais agilidade, precisão e transparência na gestão dos veículos.
 
 ## ⚙️ Passos para Execução
-1. Clonar o repositório
-git clone https://github.com/DGMMX/MottuVisualizer_Api.git
-cd MottuVisualizer_Api
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/DGMMX/MottuVisualizer_Api.git
+   cd MottuVisualizer_Api
+   ```
 
-2. Configurar a conexão com o Oracle
+2. Configure a connection string do Oracle no arquivo `appsettings.json`:
+   ```json
+   "ConnectionStrings": {
+     "OracleConnection": "User Id=seu_usuario;Password=sua_senha;Data Source=seu_host:porta/seu_servico"
+   }
+   ```
 
-No arquivo appsettings.json, insira suas credenciais e informações do ambiente:
+3. Crie o banco de dados e aplique as migrations:
+   ```bash
+   dotnet ef migrations add InitialCreate
+   dotnet ef database update
+   ```
 
-"ConnectionStrings": {
-  "OracleConnection": "User Id=usuario;Password=senha;Data Source=host:porta/servico"
-}
-
-3. Aplicar as migrações do banco de dados
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-
-4. Executar o projeto
-dotnet run
+4. Execute a aplicação:
+   ```bash
+   dotnet run
+   ```
 
 
 Após iniciar, acesse a interface do Swagger para visualizar e testar os endpoints:
 
-🔗 http://localhost/swagger/index.html
+🔗  ```
+     http://localhost/swagger/index.html
+     ```
 
-##🧪 Testando as Rotas
+## 🧪 Testando as Rotas
 ➤ 1. Criar um setor
 
 Crie primeiro um setor para estruturar o pátio:
 
+ ```
 POST /api/setores
 {
-  "nome": "Setor A"
+  "nome": "Disponível"
 }
+   ```
 
 ➤ 2. Cadastrar uma moto
 
 Adicione uma moto associando-a ao setor desejado:
 
+ ```
 POST /api/motos
 {
-  "placa": "XYZ-1234",
+  "placa": "ABC-1234",
   "setorId": 1
 }
-
+   ```
 ➤ 3. Movimentar a moto entre setores
 
 Registre uma movimentação informando o setor antigo e o novo:
 
+```
 POST /api/movimentacoes/movimentacoes?motoId={id}&novoSetorId={id}
+ ```
 
-##🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
 
 ASP.NET Core 9
 
@@ -87,7 +99,7 @@ Swagger (Swashbuckle)
 
 C# 12
 
-##💡 Principais Benefícios
+## 💡 Principais Benefícios
 
 Rastreabilidade total de motos em tempo real;
 
@@ -97,7 +109,7 @@ Facilidade de uso e integração via Swagger;
 
 Arquitetura limpa, escalável e de fácil manutenção.
 
-##📌 Considerações Finais
+## 📌 Considerações Finais
 
 O projeto MottuVisualizer foi desenvolvido com o objetivo de simular uma solução corporativa real, aplicando boas práticas de desenvolvimento e organização de código.
 Sua arquitetura permite expansões futuras, como dashboards de visualização e integração com sistemas externos de monitoramento.
