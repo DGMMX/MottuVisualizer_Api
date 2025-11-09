@@ -6,7 +6,8 @@ A aplicação oferece operações completas de CRUD, integração com banco de d
 ## 👥 Integrante
 
 - Diego Bassalo Canals Silva – RM558710 | Turma 2TDSPG
-- 
+- Giovanni de Souza Lima – RM556536 | Turma 2TDSPH
+- Vitor Tadeu Soares de Sousa RM559105 | Turma 2TDSPH
 
 ## 🎯 Propósito do Sistema
 
