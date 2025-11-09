@@ -8,19 +8,13 @@ using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =========================================================
-// 1. CONFIGURAÇÃO DE SERVIÇOS (builder.Services.Add...)
-//    Tudo aqui deve vir ANTES de builder.Build()
-// =========================================================
 
-// Banco de dados Oracle
 builder.Services.AddDbContextPool<AppDbContext>(options =>
     options
         .UseOracle(builder.Configuration.GetConnectionString("OracleConnection"))
         .EnableSensitiveDataLogging()
 );
 
-// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -29,7 +23,6 @@ builder.Services.AddCors(options =>
     );
 });
 
-// Controllers e Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -38,7 +31,6 @@ builder.Services.AddSwaggerGen(c =>
 
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        // Forçamos o TÍTULO PRINCIPAL com fallback.
         Title = builder.Configuration["Swagger:Title"] ?? "MottuVisualizer API",
 
         Description = (builder.Configuration["Swagger:Description"] ?? "Documentação da API") + DateTime.Now.Year,
@@ -51,10 +43,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Health Checks
 builder.Services.AddHealthChecks();
 
-// Versionamento de API
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -63,17 +53,9 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
 
-// =========================================================
-// 2. CONSTRUÇÃO DA APLICAÇÃO
-// =========================================================
+
 var app = builder.Build();
 
-// =========================================================
-// 3. CONFIGURAÇÃO DO PIPELINE/MIDDLEWARE (app.Use...)
-//    Tudo aqui deve vir DEPOIS de app.Build()
-// =========================================================
-
-// Configuração do Swagger/OpenAPI no pipeline (middleware)
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -81,10 +63,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        // 🛑 CORREÇÃO FINAL: Força o nome no dropdown.
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MottuVisualizer V1");
 
-        // CORREÇÃO EXTRA: Força o título da aba do navegador para ajudar contra cache.
         c.DocumentTitle = "MottuVisualizer - Documentação da API";
     });
 }
@@ -93,18 +73,15 @@ else
     app.UseExceptionHandler("/Error");
 }
 
-// Aplica a política de CORS
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
-// Mapeamento de endpoints
 app.MapControllers();
 app.MapHealthChecks("/health");
 app.MapGet("/", () => "✅ API MottuVisualizer funcionando!");
 
 
-// Configuração de Porta e Execução
 var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
 app.Urls.Add($"http://*:{port}");
 
