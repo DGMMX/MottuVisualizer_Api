@@ -39,7 +39,6 @@ namespace MotoMonitoramento.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [SwaggerOperation(
             Summary = "Cadastra um novo setor",
             Description = "Adiciona um setor ao sistema"
@@ -65,7 +64,6 @@ namespace MotoMonitoramento.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         [SwaggerOperation(
             Summary = "Atualiza um setor",
             Description = "Atualiza o nome de um setor existente"
@@ -92,7 +90,6 @@ namespace MotoMonitoramento.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         [SwaggerOperation(Summary = "Deleta um setor", Description = "Remove um setor do sistema")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Setor removido com sucesso")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Setor não encontrado")]

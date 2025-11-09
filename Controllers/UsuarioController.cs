@@ -126,7 +126,6 @@ namespace MotoMonitoramento.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [SwaggerOperation(
             Summary = "Lista todos os usuários",
             Description = "Retorna todos os usuários cadastrados"
